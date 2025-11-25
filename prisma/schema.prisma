@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String?  @unique
+  mobile    String?
+  password  String
+  picture   String?
+  role      String   @default("user")
+  enabled   Boolean  @default(true)
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  roomsCreated   Room[]          @relation("RoomCreator")
+  roomParticipants RoomParticipant[]
+  chatMessages   ChatMessage[]
+  votes          Vote[]
+}
+
+model Movie {
+  id        Int      @id @default(autoincrement())
+  title     String
+  description String?
+  thumbnail String?
+  videoUrl  String
+  duration  Int?     // วินาที
+  createdAt DateTime @default(now())
+
+  rooms     Room[]
+}
+
+model Room {
+  id          Int       @id @default(autoincrement())
+  roomCode    String     @unique
+  createdById Int
+  movieId     Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  creator     User      @relation("RoomCreator", fields: [createdById], references: [id])
+  movie       Movie     @relation(fields: [movieId], references: [id])
+
+  participants RoomParticipant[]
+  messages    ChatMessage[]
+  votes       Vote[]
+  playback    PlaybackState?
+}
+
+model RoomParticipant {
+  id      Int   @id @default(autoincrement())
+  roomId  Int
+  userId  Int
+  joinedAt DateTime @default(now())
+
+  room    Room @relation(fields: [roomId], references: [id])
+  user    User @relation(fields: [userId], references: [id])
+
+  @@unique([roomId, userId])
+}
+
+model ChatMessage {
+  id        Int     @id @default(autoincrement())
+  roomId    Int
+  userId    Int
+  message   String
+  createdAt DateTime @default(now())
+
+  room      Room @relation(fields: [roomId], references: [id])
+  user      User @relation(fields: [userId], references: [id])
+}
+
+model Vote {
+  id       Int     @id @default(autoincrement())
+  roomId   Int
+  userId   Int
+  type     String  // "pause" | "play"
+  createdAt DateTime @default(now())
+
+  room     Room @relation(fields: [roomId], references: [id])
+  user     User @relation(fields: [userId], references: [id])
+
+  @@unique([roomId, userId]) // คนหนึ่งโหวต 1 ครั้ง
+}
+
+model PlaybackState {
+  id        Int     @id @default(autoincrement())
+  roomId    Int     @unique
+  isPlaying Boolean @default(true)
+  currentTime Int   @default(0) // วินาที
+  updatedAt DateTime @updatedAt
+
+  room      Room @relation(fields: [roomId], references: [id])
+}
