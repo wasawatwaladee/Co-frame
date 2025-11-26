@@ -15,23 +15,7 @@ export default defineConfig({
   },
 });
 
-// import "dotenv/config";
-// import { defineConfig } from "@prisma/client";
 
-// export default defineConfig({
-//   schema: "prisma/schema.prisma", // path ของ schema
-//   client: {
-//     adapter: "mysql",
-//     url: process.env.DATABASE_URL, // ต้องแน่ใจว่า .env มี DATABASE_URL
-//   },
-//   datasource: {
-//     name: "db",       // ต้องตรงกับ schema.prisma
-//     provider: "mysql",
-//   },
-//   migrations: {
-//     path: "prisma/migrations",
-//   },
-// });
 
 
 
