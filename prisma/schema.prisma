@@ -20,7 +20,7 @@
     enabled   Boolean  @default(true)
     address   String?
     createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    updatedAt DateTime @updatedAt @default(now())
     googleID  String?
     roomsCreated   Room[]          @relation("RoomCreator")
     roomParticipants RoomParticipant[]
@@ -46,7 +46,7 @@
     createdById Int
     movieId     Int
     createdAt   DateTime  @default(now())
-    updatedAt   DateTime  @updatedAt
+    updatedAt   DateTime  @updatedAt @default(now())
 
     creator     User      @relation("RoomCreator", fields: [createdById], references: [id])
     movie       Movie     @relation(fields: [movieId], references: [id])
@@ -98,7 +98,7 @@
     roomId    Int     @unique
     isPlaying Boolean @default(true)
     currentTime Int   @default(0) // วินาที
-    updatedAt DateTime @updatedAt
+    updatedAt DateTime @updatedAt @default(now())
 
     room      Room @relation(fields: [roomId], references: [id])
   }
