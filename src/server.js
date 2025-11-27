@@ -9,6 +9,7 @@ const server = http.createServer(app);
 
 const PORT = process.env.PORT || 5500;
 
+app.listen(PORT,()=>(console.log(`sever run port : http://localhost:${PORT}`)))
 
 const MOVIES = [
   {
@@ -144,7 +145,4 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log("Server listening on port", PORT);
-});
 

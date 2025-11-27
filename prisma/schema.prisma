@@ -1,104 +1,104 @@
-generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
-}
+  generator client {
+    provider = "prisma-client-js"
+    output   = "../src/generated/prisma"
+  }
 
-datasource db {
-  provider = "mysql"
+  datasource db {
+    provider = "mysql"
+     url      = env("DATABASE_URL")
+  }
 
-}
+  model User {
+    id        Int      @id @default(autoincrement())
+    firstName String
+    lastName  String
+    email     String?  @unique
+    mobile    String?
+    password  String
+    picture   String?
+    role      String   @default("user")
+    enabled   Boolean  @default(true)
+    address   String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    googleID  String?
+    roomsCreated   Room[]          @relation("RoomCreator")
+    roomParticipants RoomParticipant[]
+    chatMessages   ChatMessage[]
+    votes          Vote[]
+  }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  firstName String
-  lastName  String
-  email     String?  @unique
-  mobile    String?
-  password  String
-  picture   String?
-  role      String   @default("user")
-  enabled   Boolean  @default(true)
-  address   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  model Movie {
+    id        Int      @id @default(autoincrement())
+    title     String
+    description String?
+    thumbnail String?
+    videoUrl  String
+    duration  Int?     // วินาที
+    createdAt DateTime @default(now())
 
-  roomsCreated   Room[]          @relation("RoomCreator")
-  roomParticipants RoomParticipant[]
-  chatMessages   ChatMessage[]
-  votes          Vote[]
-}
+    rooms     Room[]
+  }
 
-model Movie {
-  id        Int      @id @default(autoincrement())
-  title     String
-  description String?
-  thumbnail String?
-  videoUrl  String
-  duration  Int?     // วินาที
-  createdAt DateTime @default(now())
+  model Room {
+    id          Int       @id @default(autoincrement())
+    roomCode    String     @unique
+    createdById Int
+    movieId     Int
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
 
-  rooms     Room[]
-}
+    creator     User      @relation("RoomCreator", fields: [createdById], references: [id])
+    movie       Movie     @relation(fields: [movieId], references: [id])
 
-model Room {
-  id          Int       @id @default(autoincrement())
-  roomCode    String     @unique
-  createdById Int
-  movieId     Int
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+    participants RoomParticipant[]
+    messages    ChatMessage[]
+    votes       Vote[]
+    playback    PlaybackState?
+  }
 
-  creator     User      @relation("RoomCreator", fields: [createdById], references: [id])
-  movie       Movie     @relation(fields: [movieId], references: [id])
+  model RoomParticipant {
+    id      Int   @id @default(autoincrement())
+    roomId  Int
+    userId  Int
+    joinedAt DateTime @default(now())
 
-  participants RoomParticipant[]
-  messages    ChatMessage[]
-  votes       Vote[]
-  playback    PlaybackState?
-}
+    room    Room @relation(fields: [roomId], references: [id])
+    user    User @relation(fields: [userId], references: [id])
 
-model RoomParticipant {
-  id      Int   @id @default(autoincrement())
-  roomId  Int
-  userId  Int
-  joinedAt DateTime @default(now())
+    @@unique([roomId, userId])
+  }
 
-  room    Room @relation(fields: [roomId], references: [id])
-  user    User @relation(fields: [userId], references: [id])
+  model ChatMessage {
+    id        Int     @id @default(autoincrement())
+    roomId    Int
+    userId    Int
+    message   String
+    createdAt DateTime @default(now())
 
-  @@unique([roomId, userId])
-}
+    room      Room @relation(fields: [roomId], references: [id])
+    user      User @relation(fields: [userId], references: [id])
+  }
 
-model ChatMessage {
-  id        Int     @id @default(autoincrement())
-  roomId    Int
-  userId    Int
-  message   String
-  createdAt DateTime @default(now())
+  model Vote {
+    id       Int     @id @default(autoincrement())
+    roomId   Int
+    userId   Int
+    type     String  // "pause" | "play"
+    createdAt DateTime @default(now())
 
-  room      Room @relation(fields: [roomId], references: [id])
-  user      User @relation(fields: [userId], references: [id])
-}
+    room     Room @relation(fields: [roomId], references: [id])
+    user     User @relation(fields: [userId], references: [id])
 
-model Vote {
-  id       Int     @id @default(autoincrement())
-  roomId   Int
-  userId   Int
-  type     String  // "pause" | "play"
-  createdAt DateTime @default(now())
+    @@unique([roomId, userId]) // คนหนึ่งโหวต 1 ครั้ง
+  }
 
-  room     Room @relation(fields: [roomId], references: [id])
-  user     User @relation(fields: [userId], references: [id])
+  model PlaybackState {
+    id        Int     @id @default(autoincrement())
+    roomId    Int     @unique
+    isPlaying Boolean @default(true)
+    currentTime Int   @default(0) // วินาที
+    updatedAt DateTime @updatedAt
 
-  @@unique([roomId, userId]) // คนหนึ่งโหวต 1 ครั้ง
-}
-
-model PlaybackState {
-  id        Int     @id @default(autoincrement())
-  roomId    Int     @unique
-  isPlaying Boolean @default(true)
-  currentTime Int   @default(0) // วินาที
-  updatedAt DateTime @updatedAt
-
-  room      Room @relation(fields: [roomId], references: [id])
-}
+    room      Room @relation(fields: [roomId], references: [id])
+  }
