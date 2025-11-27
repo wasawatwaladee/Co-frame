@@ -2,6 +2,9 @@ import http from "http";
 import { Server as IOServer } from "socket.io";
 import dotenv from "dotenv";
 import app from "./app.js";
+import mainRouter from "./routes/main.route.js";
+import notFoundMiddleware from "./middlewares/not-found.Middleware.js";
+import errorMiddleware from "./middlewares/error.Middleware.js";
 
 dotenv.config();
 
@@ -9,7 +12,6 @@ const server = http.createServer(app);
 
 const PORT = process.env.PORT || 5500;
 
-app.listen(PORT,()=>(console.log(`sever run port : http://localhost:${PORT}`)))
 
 const MOVIES = [
   {
@@ -54,6 +56,16 @@ app.get("/movies/:id", (req, res) => {
   res.json(m);
 });
 
+app.use("/api", mainRouter )
+
+//notfound middleware
+app.use(notFoundMiddleware)
+
+//error middleware
+app.use(errorMiddleware)
+
+
+
 /* Socket.io server */
 const io = new IOServer(server, {
   cors: {
@@ -69,7 +81,7 @@ let userCounter = 1;
 const userNames = {};
 
 io.on("connection", (socket) => {
-  const username = `user${userCounter++}`  
+  const username = `user${userCounter++}` 
   userNames[socket.id] = username;
   console.log("socket connected:", socket.id);
   console.log(`Assigned username ${username} to ${socket.id}`);
@@ -124,6 +136,8 @@ io.on("connection", (socket) => {
       action,
       currentTime,
       serverTime: Date.now(),
+      test:2,
+      roomId
     });
   });
 
@@ -145,4 +159,6 @@ io.on("connection", (socket) => {
   });
 });
 
-
+server.listen(PORT, () => {
+  console.log("Server listening on port", PORT);
+});

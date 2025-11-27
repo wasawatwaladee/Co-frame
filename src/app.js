@@ -7,25 +7,25 @@ import mainRouter from './routes/main.route.js';
 
 const app = express();
 
-console.log('gggggg')
+// console.log('gggggg')
 
 app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
 
 
-app.use("/api", mainRouter )
+// app.use("/api", mainRouter )
 
 // Homepage
 app.get('/', (req, res) => {
     res.send("Hello from homepage");
 });
 
-//notfound middleware
-app.use(notFoundMiddleware)
+// //notfound middleware
+// app.use(notFoundMiddleware)
 
-//error middleware
-app.use(errorMiddleware)
+// //error middleware
+// app.use(errorMiddleware)
 
 
 
