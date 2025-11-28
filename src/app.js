@@ -10,7 +10,9 @@ const app = express();
 // console.log('gggggg')
 
 app.use(morgan('dev'));
-app.use(cors());
+app.use(cors(
+    
+));
 app.use(express.json());
 
 

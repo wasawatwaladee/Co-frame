@@ -26,6 +26,13 @@
     roomParticipants RoomParticipant[]
     chatMessages   ChatMessage[]
     votes          Vote[]
+    watchlists     WatchList[]
+  }
+
+
+  model WatchList {
+    id String @id @default(cuid())
+    
   }
 
   model Movie {
