@@ -57,7 +57,7 @@ app.get("/movies/:id", (req, res) => {
   res.json(m);
 });
 
-app.use("/api", apiLimiter, mainRouter )
+app.use("/api", mainRouter )
 
 //notfound middleware
 app.use(notFoundMiddleware)

@@ -4,7 +4,7 @@ import { authLimiter } from "src/middlewares/rateLimiter.middleware.js";
 
 const mainRouter = Router();
 
-mainRouter.use('/auth', authLimiter, authRouter)
+mainRouter.use('/auth', authRouter)
 
 
 export default mainRouter;
