@@ -5,6 +5,7 @@ import app from "./app.js";
 import mainRouter from "./routes/main.route.js";
 import notFoundMiddleware from "./middlewares/not-found.Middleware.js";
 import errorMiddleware from "./middlewares/error.Middleware.js";
+import { apiLimiter} from "./middlewares/rateLimiter.middleware.js";
 
 dotenv.config();
 
@@ -56,7 +57,7 @@ app.get("/movies/:id", (req, res) => {
   res.json(m);
 });
 
-app.use("/api", mainRouter )
+app.use("/api", apiLimiter, mainRouter )
 
 //notfound middleware
 app.use(notFoundMiddleware)
