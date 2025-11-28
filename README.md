@@ -66,6 +66,7 @@ GET    /users/:id (เสิร์ชหาข้อมูล user คนอื�
 🎬 Movies
 GET    /movies (get all)
 GET    /movies/:id 
+
 GET    /movies/:id/stream
 GET    /movies/search?q=
 
