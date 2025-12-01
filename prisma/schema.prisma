@@ -5,149 +5,104 @@
 
 // datasource db {
 //   provider = "mysql"
-//   url      = env("DATABASE_URL")
+//    url      = env("DATABASE_URL")
 // }
 
 // model User {
-//   id               Int               @id @default(autoincrement())
-//   firstName        String
-//   lastName         String
-//   email            String?           @unique
-//   mobile           String?
-//   password         String
-//   picture          String?
-//   role             String            @default("user")
-//   enabled          Boolean           @default(true)
-//   address          String?
-//   createdAt        DateTime          @default(now())
-//   updatedAt        DateTime          @default(now()) @updatedAt
-//   googleID         String?
-//   roomsCreated     Room[]            @relation("RoomCreator")
+//   id        Int      @id @default(autoincrement())
+//   firstName String
+//   lastName  String
+//   email     String?  @unique
+//   mobile    String?
+//   password  String
+//   picture   String?
+//   role      String   @default("user")
+//   enabled   Boolean  @default(true)
+//   address   String?
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt @default(now())
+//   googleID  String?
+//   roomsCreated   Room[]          @relation("RoomCreator")
 //   roomParticipants RoomParticipant[]
-//   chatMessages     ChatMessage[]
-//   votes            Vote[]
-//   posts            Post[]
-//   comments         Comment[]
-//   likes            Like[]
+//   chatMessages   ChatMessage[]
+//   votes          Vote[]
+
 // }
 
 // model Movie {
-//   id          Int      @id @default(autoincrement())
-//   title       String
+//   id        Int      @id @default(autoincrement())
+//   title     String
 //   description String?
-//   thumbnail   String?
-//   videoUrl    String
-//   poster      String
-//   duration    Int? // วินาที
-//   createdAt   DateTime @default(now())
+//   thumbnail String?
+//   videoUrl  String
+//   poster    String
+//   duration  Int?     // วินาที
+//   createdAt DateTime @default(now())
 
-//   rooms Room[]
+//   rooms     Room[]
 // }
 
 // model Room {
-//   id          Int      @id @default(autoincrement())
-//   roomCode    String   @unique
+//   id          Int       @id @default(autoincrement())
+//   roomCode    String     @unique
 //   createdById Int
 //   movieId     Int
-//   createdAt   DateTime @default(now())
-//   updatedAt   DateTime @default(now()) @updatedAt
+//   createdAt   DateTime  @default(now())
+//   updatedAt   DateTime  @updatedAt @default(now())
 
-//   creator User  @relation("RoomCreator", fields: [createdById], references: [id])
-//   movie   Movie @relation(fields: [movieId], references: [id])
+//   creator     User      @relation("RoomCreator", fields: [createdById], references: [id])
+//   movie       Movie     @relation(fields: [movieId], references: [id])
 
 //   participants RoomParticipant[]
-//   messages     ChatMessage[]
-//   votes        Vote[]
-//   playback     PlaybackState?
+//   messages    ChatMessage[]
+//   votes       Vote[]
+//   playback    PlaybackState?
 // }
 
 // model RoomParticipant {
-//   id       Int      @id @default(autoincrement())
-//   roomId   Int
-//   userId   Int
+//   id      Int   @id @default(autoincrement())
+//   roomId  Int
+//   userId  Int
 //   joinedAt DateTime @default(now())
 
-//   room Room @relation(fields: [roomId], references: [id])
-//   user User @relation(fields: [userId], references: [id])
+//   room    Room @relation(fields: [roomId], references: [id])
+//   user    User @relation(fields: [userId], references: [id])
 
 //   @@unique([roomId, userId])
 // }
 
 // model ChatMessage {
-//   id        Int      @id @default(autoincrement())
+//   id        Int     @id @default(autoincrement())
 //   roomId    Int
 //   userId    Int
 //   message   String
 //   createdAt DateTime @default(now())
 
-//   room Room @relation(fields: [roomId], references: [id])
-//   user User @relation(fields: [userId], references: [id])
+//   room      Room @relation(fields: [roomId], references: [id])
+//   user      User @relation(fields: [userId], references: [id])
 // }
 
 // model Vote {
-//   id        Int      @id @default(autoincrement())
-//   roomId    Int
-//   userId    Int
-//   type      String // "pause" | "play"
+//   id       Int     @id @default(autoincrement())
+//   roomId   Int
+//   userId   Int
+//   type     String  // "pause" | "play"
 //   createdAt DateTime @default(now())
 
-//   room Room @relation(fields: [roomId], references: [id])
-//   user User @relation(fields: [userId], references: [id])
+//   room     Room @relation(fields: [roomId], references: [id])
+//   user     User @relation(fields: [userId], references: [id])
 
 //   @@unique([roomId, userId]) // คนหนึ่งโหวต 1 ครั้ง
 // }
 
 // model PlaybackState {
-//   id          Int      @id @default(autoincrement())
-//   roomId      Int      @unique
-//   isPlaying   Boolean  @default(true)
-//   currentTime Int      @default(0) // วินาที
-//   updatedAt   DateTime @default(now()) @updatedAt
+//   id        Int     @id @default(autoincrement())
+//   roomId    Int     @unique
+//   isPlaying Boolean @default(true)
+//   currentTime Int   @default(0) // วินาที
+//   updatedAt DateTime @updatedAt @default(now())
 
-//   room Room @relation(fields: [roomId], references: [id])
-// }
-
-// model Post {
-//   id        Int       @id @default(autoincrement())
-//   message   String?   @db.Text
-//   image     String?
-//   createdAt DateTime  @default(now()) @db.Timestamp(0)
-//   updatedAt DateTime  @updatedAt @db.Timestamp(0)
-//   userId    Int
-//   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-//   comments  Comment[]
-//   likes     Like[]
-
-//   communityCategories    Community_Categories? @relation(fields: [community_CategoriesId], references: [id])
-//   community_CategoriesId Int?
-// }
-
-// model Comment {
-//   id        Int      @id @default(autoincrement())
-//   message   String?  @db.Text
-//   createdAt DateTime @default(now()) @db.Timestamp(0)
-//   updatedAt DateTime @updatedAt @db.Timestamp(0)
-//   postId    Int
-//   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-//   userId    Int
-//   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-// }
-
-// model Like {
-//   userId    Int
-//   postId    Int
-//   createdAt DateTime @default(now()) @db.Timestamp(0)
-//   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-//   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-
-//   @@id([userId, postId])
-// }
-
-// model Community_Categories {
-//   id          Int    @id @default(autoincrement())
-//   name        String
-//   description String
-//   post        Post[]
+//   room      Room @relation(fields: [roomId], references: [id])
 // }
 
 generator client {
