@@ -25,7 +25,7 @@
     address   String?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt @default(now())
-    googleID  String?
+    googleId  String?
 
     //Watch Party Relations
     roomsCreated   Room[]          @relation("RoomCreator")
