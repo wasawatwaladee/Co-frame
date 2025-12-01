@@ -7,7 +7,7 @@ import { getUserBy } from '../services/user.service.js'
 
 
 export const register = async (req, res, next) => {
- const {email, firstName, lastName, password, confirmPassword} = req.body
+ const {email, firstName, lastName, password,username,confirmPassword} = req.body
  console.log('req.body', req.body)
 
  
