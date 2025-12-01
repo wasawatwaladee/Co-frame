@@ -23,4 +23,9 @@ export const loginSchema = z.object({
  password : z.string().min(4, "password at least 4 characters"),})
  
 
-
+export const userProfileSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  email: z.string().email(),
+  picture: z.string().url().optional().nullable(),
+});
