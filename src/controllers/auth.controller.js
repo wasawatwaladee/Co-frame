@@ -7,28 +7,26 @@ import { getUserBy } from '../services/user.service.js'
 
 
 export const register = async (req, res, next) => {
- const {email, firstName, lastName, password, mobile} = req.body
+ const {email, firstName, lastName, password, confirmPassword} = req.body
  console.log('req.body', req.body)
 
  
 // validation
 const user = registerSchema.parse(req.body)
+console.log('user from registerSchema', user)
 
  
  
    // find user for non-duplicate
- const haveUser = await getUserBy({email})
- console.log('haveUser', haveUser
- )
+ const haveUser = await getUserBy({email:user.email})
+ console.log('haveUser', haveUser)
  if(haveUser) {
    return next(createHttpError[409]('This user already register')) }
 
  const newUser = {
-  email : email,
+  ...user,
   password : await bcrypt.hash(password, 10),
-  firstName : firstName,
-  lastName : lastName,
-  mobile : mobile  
+  
 }
    
  const result = await prisma.user.create({data : newUser})
