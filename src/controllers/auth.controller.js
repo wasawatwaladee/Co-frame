@@ -126,7 +126,9 @@ export const registerHandler = async (req, res, next) => {
 
 
 
-export const loginHandler = async (req,res,next) => {  
+export const loginHandler = async (req,res,next) => { 
+    const {email, password } = req.body
+    const user = loginSchema.parse(req.body) 
     
     try {
       const user = loginSchema.parse(req.body);
