@@ -26,15 +26,11 @@
     roomParticipants RoomParticipant[]
     chatMessages   ChatMessage[]
     votes          Vote[]
-    watchlists     WatchList[]
-  }
-
-
-  model WatchList {
-    id String @id @default(cuid())
     
   }
 
+
+ 
   model Movie {
     id        Int      @id @default(autoincrement())
     title     String
