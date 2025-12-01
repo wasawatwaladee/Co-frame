@@ -1,9 +1,8 @@
 import bcrypt from 'bcryptjs'; 
-import jsonwebtoken from 'jsonwebtoken'; // 🟢 แก้ไขการนำเข้าให้สอดคล้องกับ jsonwebtoken.sign
+import jsonwebtoken from 'jsonwebtoken'; 
 import createHttpError from "http-errors"; 
 import { loginSchema, registerSchema } from '../schemas/auth.schema.js' 
-import { OAuth2Client } from 'google-auth-library';
-// 🟢 นำเข้าฟังก์ชัน Service Layer
+import { OAuth2Client } from 'google-auth-library'; 
 import { getUserBy, createUser } from '../services/user.service.js'; 
 import prisma from "../config/prisma.js" 
 import dotenv from 'dotenv';
@@ -23,10 +22,6 @@ if (GOOGLE_CLIENT_ID) {
 //Client สำหรับตรวจสอบ Token
 const client = new OAuth2Client(GOOGLE_CLIENT_ID); 
 
-
-/**
- * 🟢 Express Handler สำหรับ Google Login (ใช้ ID Token)
- */
 export const googleLoginHandler = async (req, res, next) => {
     const idToken = req.body.idToken; 
 
@@ -55,12 +50,12 @@ export const googleLoginHandler = async (req, res, next) => {
         }
 
         // 1. ค้นหาผู้ใช้ด้วย Google ID
-        let user = await getUserBy({ googleID: googleId }); 
+        let user = await getUserBy({ googleId: googleId }); 
 
         if (!user) {
             // 2. ถ้าไม่พบ ให้สร้างบัญชีใหม่
             user = await createUser({
-                googleID: googleId,
+                googleId: googleId,
                 email: email,
                 name: name,
                 picture: picture, 
@@ -72,7 +67,7 @@ export const googleLoginHandler = async (req, res, next) => {
 
         // 3. สร้าง App JWT Token
         const appToken = jsonwebtoken.sign( 
-            { id: user.id, email: user.email, role: user.role, googleID: user.googleID }, 
+            { id: user.id, email: user.email, role: user.role, googleId: user.googleId }, 
             JWT_SECRET, 
             { expiresIn: '1d' }
         );
@@ -84,7 +79,7 @@ export const googleLoginHandler = async (req, res, next) => {
                 id: user.id,
                 name: user.name,
                 email: user.email,
-                googleID: user.googleID, 
+                googleId: user.googleId, 
                 picture: user.picture
             }
         });
@@ -100,10 +95,7 @@ export const googleLoginHandler = async (req, res, next) => {
 }
 
 
-/**
- * 🔵 Express Handler สำหรับ Register (Email/Password)
- */
-export const registerHandler = async (req, res, next) => { // เปลี่ยนชื่อ export เป็น registerHandler
+export const registerHandler = async (req, res, next) => { 
     const {email, firstName, lastName, password, mobile} = req.body
     
     // validation
@@ -113,7 +105,7 @@ export const registerHandler = async (req, res, next) => { // เปลี่ย
     const haveUser = await getUserBy({ email: email }); 
     
     if(haveUser) {
-        return next(createHttpError(409, 'This user already register')) // 🟢 แก้ไข Syntax
+        return next(createHttpError(409, 'This user already register')) 
     }
 
     const newUser = {
@@ -124,7 +116,7 @@ export const registerHandler = async (req, res, next) => { // เปลี่ย
         mobile : mobile  
     }
     
-    // 2. สร้างบัญชีผู้ใช้ใน Prisma (ใช้ createUser จาก Service Layer)
+    // 2. สร้างบัญชีผู้ใช้ใน Prisma 
     const result = await createUser(newUser)
     res.json({
         msg : 'Register Successful',
@@ -133,27 +125,26 @@ export const registerHandler = async (req, res, next) => { // เปลี่ย
 }
 
 
-/**
- * 🔵 Express Handler สำหรับ Login (Email/Password)
- */
-export const loginHandler = async (req,res,next) => { // เปลี่ยนชื่อ export เป็น loginHandler
-    const {email, password } = req.body
-    const user = loginSchema.parse(req.body) 
+
+export const loginHandler = async (req,res,next) => {  
     
-    // 1. ค้นหาผู้ใช้
+    try {
+      const user = loginSchema.parse(req.body);
+
+    
     const foundUser = await getUserBy({email : email}); 
     
     //check user
-    if(!foundUser) { return next(createHttpError(401, 'Invalid Login')) } // 🟢 แก้ไข Syntax
+    if(!foundUser) { return next(createHttpError(401, 'Invalid Login')) } 
 
     //check password
     let pwOk = await bcrypt.compare(password, foundUser.password)
     if(!pwOk) { 
-        return next(createHttpError(401, 'Invalid Login'))  // 🟢 แก้ไข Syntax
+        return next(createHttpError(401, 'Invalid Login')) 
     }
 
     const payload = {id : foundUser.id }
-    const token = jsonwebtoken.sign(payload, process.env.JWT_SECRET, { // 🟢 ใช้ jsonwebtoken.sign
+    const token = jsonwebtoken.sign(payload, process.env.JWT_SECRET, { 
         algorithm: 'HS256',
         expiresIn: '15d'
     })
@@ -163,4 +154,11 @@ export const loginHandler = async (req,res,next) => { // เปลี่ยน�
         token: token,
         user : userData
     })
+} catch (error) {
+        if (error.name === 'ZodError') {
+             console.error("Zod Validation Error:", error.errors);
+             return res.status(400).json({ message: 'Login validation failed. Missing email or password.', errors: error.errors });
+        }
+        return next(error);
+    }
 }

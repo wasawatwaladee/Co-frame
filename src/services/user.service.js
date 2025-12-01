@@ -5,10 +5,8 @@ export const getUserBy = async (whereCondition) => {
 	// เปลี่ยนไปใช้ findFirst แทน findUnique เพื่อรองรับเงื่อนไขที่ไม่ใช่ Unique Field
 	const correctedCondition = {};
     for (const key in whereCondition) {
-        if (key === 'googleId') {
-            correctedCondition['googleID'] = whereCondition[key]; 
-        } else if (key === 'googleID') {
-            correctedCondition['googleID'] = whereCondition[key];
+         if (key === 'googleId') {
+            correctedCondition['googleId'] = whereCondition[key];
         } else {
             correctedCondition[key] = whereCondition[key];
         }
@@ -22,17 +20,17 @@ export const createUser = async (userData) => {
 
 	const correctedData = {};
 
-	const isGoogleLogin = userData.googleId || userData.googleID;
+	const isGoogleLogin = userData.googleId || userData.googleId;
 
 	 if (isGoogleLogin) {
         // --- Logic specific to Google Login ---
         
-        const googleId = userData.googleId || userData.googleID;
+        const googleId = userData.googleId || userData.googleId;
         const fullName = userData.name || userData.email.split('@')[0];
         const parts = fullName.split(' ');
         
         // Map Google data to Prisma required fields (Explicitly guarantee all required fields)
-        correctedData.googleID = googleId; // 1. Google ID (แก้ไขตาม Schema)
+        correctedData.googleId = googleId; // 1. Google ID (แก้ไขตาม Schema)
         correctedData.email = userData.email; // 2. Email
         correctedData.picture = userData.picture;
         
@@ -42,14 +40,9 @@ export const createUser = async (userData) => {
         correctedData.lastName = userData.lastName || (parts.length > 1 ? parts.slice(1).join(' ') : ' '); 
         
         // 4. Handle other required fields (password, mobile)
-        // ⚠️ ASSUMPTION: Password และ Mobile ถูกกำหนดให้ REQUIRED ใน Prisma Schema
         if (!correctedData.password) {
             // กำหนดค่าว่างสำหรับผู้ใช้ Google (ถ้า Schema อนุญาต)
             correctedData.password = ''; 
-        }
-        if (!correctedData.mobile) {
-            // กำหนดค่าเริ่มต้นสำหรับฟิลด์บังคับ
-            correctedData.mobile = '0000000000'; 
         }
 
     } else {
@@ -59,7 +52,7 @@ export const createUser = async (userData) => {
         
         // Final sanity check for Prisma fields 
         if (correctedData.googleId) {
-            correctedData.googleID = correctedData.googleId;
+            correctedData.googleId = correctedData.googleId;
             delete correctedData.googleId;
         }
     }
