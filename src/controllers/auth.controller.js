@@ -11,7 +11,7 @@ export const register = async (req, res, next) => {
  console.log('req.body', req.body)
 
  
-// validation
+// validation 1
 const user = registerSchema.parse(req.body)
 
  
