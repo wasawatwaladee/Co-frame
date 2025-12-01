@@ -72,7 +72,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api", mainRouter);
-app.use("/api", mainRouter);
 
 app.use("/api/post", postRouter);
 app.use("/api/comment", commentRouter);
