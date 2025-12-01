@@ -22,6 +22,7 @@ app.use(express.json());
 app.get('/', (req, res) => {
     res.send("Hello from homepage");
 });
+app.use("/api", mainRouter )
 
 // //notfound middleware
 // app.use(notFoundMiddleware)

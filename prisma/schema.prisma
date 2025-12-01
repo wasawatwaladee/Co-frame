@@ -47,6 +47,7 @@
     description String?
     thumbnail String?
     videoUrl  String
+    poster    String
     duration  Int?     // วินาที
     createdAt DateTime @default(now())
 
