@@ -1,4 +1,5 @@
-import { categoriesService } from "../services/categories.service.js";
+import { categoriesService } from "../services/categoriesCommunity.service.js";
+
 
 export const categoriesController = {
   getAllCategories: async (req, res, next) => {

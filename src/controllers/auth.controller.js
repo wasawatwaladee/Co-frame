@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import createHttpError from "http-errors";
 import { loginSchema, registerSchema } from "../schemas/auth.schema.js";
 import prisma from "../config/prisma.js";
-import { getUserBy } from "../services/user.service.js";
+import { getMe, getUserBy } from "../services/user.service.js";
 
 export const register = async (req, res, next) => {
   const { email, firstName, lastName, password, confirmPassword, username } =
@@ -63,3 +63,23 @@ export const login = async (req, res, next) => {
     user: userData,
   });
 };
+
+export const profileUser = async (req, res, next) => {
+  try {
+    const userId = (req.user.id )
+    const user = await getMe(userId)
+    if(!user){
+      return res.status(404).json({message: "User not found"})
+    }
+    const {password, createdAt, updatedAt, ...userData} = user
+    res.json({
+      success: true,
+      user: {...userData}
+    })
+  } catch (error) {
+    next(error)
+  }
+
+}
+
+
