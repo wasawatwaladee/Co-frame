@@ -71,7 +71,7 @@ export const profileUser = async (req, res, next) => {
     if(!user){
       return res.status(404).json({message: "User not found"})
     }
-    const {password, createdAt, updatedAt, ...userData} = user
+    const {password, ...userData} = user
     res.json({
       success: true,
       user: {...userData}

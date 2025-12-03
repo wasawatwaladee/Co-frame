@@ -23,7 +23,7 @@ export default async (req, res, next) => {
   if (!foundUser) {
     throw createHttpError[401]("Unauthorized 3");
   }
-  const { password, createdAt, updatedAt, ...userData } = foundUser;
+  const { password, ...userData } = foundUser;
   req.user = userData;
   next();
 };
