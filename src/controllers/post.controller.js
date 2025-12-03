@@ -25,18 +25,20 @@ export const postController = {
 
   async getAllPosts(req, res, next) {
     try {
-      const posts = await postService.getAllPosts();
+      const { categoryId } = req.query;
+
+      const posts = await postService.getAllPosts(categoryId);
       res.json({ posts });
     } catch (error) {
       next(error);
     }
   },
-
   async deletePost(req, res, next) {
     try {
       const { id } = req.params;
       const userId = req.user.id;
-      await postService.deletePost(+id, userId);
+      const userRole = req.user.role;
+      await postService.deletePost(+id, userId, userRole);
       res.json({ message: "Delete done" });
     } catch (error) {
       next(error);
