@@ -64,9 +64,11 @@ model Movie {
   poster      String
   duration    Int? // วินาที
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
 
-  categories MovieCategory[]
-  rooms      Room[]
+  rooms           Room[]
+  category   MovieCategory @relation(fields: [categoryId], references: [id])
+  categoryId Int?
 }
 
 model MovieCategory {
@@ -74,9 +76,7 @@ model MovieCategory {
   name        String
   description String?
   createdAt   DateTime @default(now())
-  movieId     Int
-
-  movie Movie @relation(fields: [movieId], references: [id])
+  movies      Movie[]
 }
 
 //ROOM (WATCH PARTY / LIVE WATCH)
