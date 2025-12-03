@@ -13,21 +13,33 @@ enum Role {
   USER
 }
 
+enum Genre {
+  Action
+  Comedy
+  Drama
+  Horror
+  SciFi
+  Romance
+  Thriller
+}
+
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  firstName String
-  lastName  String
-  email     String?  @unique
-  mobile    String?
-  password  String
-  picture   String?
-  role      Role     @default(USER)
-  enabled   Boolean  @default(true)
-  address   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-  googleId  String?
+  id            Int      @id @default(autoincrement())
+  username      String?  @unique
+  firstName     String
+  lastName      String
+  email         String?  @unique
+  mobile        String?
+  password      String
+  bio           String?
+  favoriteGenre Genre?
+  picture       String?
+  role          Role     @default(USER)
+  enabled       Boolean  @default(true)
+  address       String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
+  googleId      String?
 
   //Watch Party Relations
   roomsCreated     Room[]            @relation("RoomCreator")
@@ -54,8 +66,13 @@ model Movie {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
 
+<<<<<<< HEAD
   rooms           Room[]
   category   MovieCategory @relation(fields: [categoryId], references: [id])
+=======
+  rooms      Room[]
+  category   MovieCategory? @relation(fields: [categoryId], references: [id])
+>>>>>>> 89364b199a159626641b57a64a017696114e3e59
   categoryId Int?
 }
 
@@ -64,7 +81,11 @@ model MovieCategory {
   name        String
   description String?
   createdAt   DateTime @default(now())
+<<<<<<< HEAD
   moives      Movie[]
+=======
+  movies      Movie[]
+>>>>>>> 89364b199a159626641b57a64a017696114e3e59
 }
 
 //ROOM (WATCH PARTY / LIVE WATCH)

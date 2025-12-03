@@ -1,8 +1,11 @@
 import { categoriesService } from "../services/categoriesCommunity.service.js";
+<<<<<<< HEAD
 
+=======
+>>>>>>> 89364b199a159626641b57a64a017696114e3e59
 
 export const categoriesController = {
-  getAllCategories: async (req, res, next) => {
+  async getAllCategories(req, res, next) {
     try {
       const categories = await categoriesService.getAllCategoriesService();
       res.json({ categories });
@@ -11,9 +14,9 @@ export const categoriesController = {
     }
   },
 
-  createCategory: async (req, res, next) => {
+  async createCategory(req, res, next) {
     try {
-      const { name, description, slug } = req.body;
+      const { name, description, thumbnail, slug } = req.body;
 
       const result = await categoriesService.createCategoriesService(
         name,
@@ -28,5 +31,28 @@ export const categoriesController = {
     } catch (error) {
       next(error);
     }
+  },
+  async deleteCategory(categoryId) {
+    const foundCategory = await prisma.communityCategory.findUnique({
+      where: { id: categoryId },
+      include: { _count: { select: { posts: true } } },
+    });
+
+    if (!foundCategory) {
+      throw createHttpError(404, "Category not found");
+    }
+
+    // 2. (Optional) ป้องกันการลบ ถ้ายังมี Post อยู่ในหมวดนี้
+    // ถ้าลบหมวดนี้ Post ที่อยู่ข้างในจะไม่มีที่อยู่ (หรือ Error FK Constraint)
+    if (foundCategory._count.posts > 0) {
+      throw createHttpError(
+        400,
+        "Cannot delete category with existing posts. Please move or delete posts first."
+      );
+    }
+
+    return await prisma.communityCategory.delete({
+      where: { id: categoryId },
+    });
   },
 };
