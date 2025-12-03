@@ -66,20 +66,71 @@ export const login = async (req, res, next) => {
 
 export const profileUser = async (req, res, next) => {
   try {
-    const userId = (req.user.id )
-    const user = await getMe(userId)
-    if(!user){
-      return res.status(404).json({message: "User not found"})
+    const userId = req.user.id;
+    const user = await getMe(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
-    const {password, ...userData} = user
+    const { password, ...userData } = user;
     res.json({
       success: true,
-      user: {...userData}
-    })
+      user: { ...userData },
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
+};
 
-}
+export const updateProfile = async (req, res, next) => {
+  try {
+    const userId = Number(req.user.id); //from middleware
+    const { firstName, lastName, username, bio, favoriteGenre } = req.body;
 
+    const updatedUser = await prisma.user.update({
+      where: { id: Number(userId) },
+      data: {
+        firstName,
+        lastName,
+        username,
+        bio,
+        favoriteGenre,
+      },
+    });
+    const { password, ...userData } = updatedUser;
+    res.json({
+      success: true,
+      user: userData,
+      message: "Profile Update Successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
+export const getUserByUsername = async (req, res, next) => {
+  try {
+    const username = req.params.username.toLowerCase();
+
+    const user = await prisma.user.findFirst({
+      where: {
+        username: username,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const { password, ...safeUser } = user;
+
+    res.json({
+      success: true,
+      user: safeUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
