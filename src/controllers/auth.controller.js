@@ -77,10 +77,12 @@ export const googleLoginHandler = async (req, res, next) => {
       token: appToken,
       user: {
         id: user.id,
+        user: user.username,
         name: user.firstName ? `${user.firstName} ${user.lastName}`.trim() : user.email,
         email: user.email,
         googleId: user.googleId,
-        picture: user.picture
+        picture: user.picture,
+        role : user.role
       }
     });
 

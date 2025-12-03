@@ -1,8 +1,15 @@
 import prisma from '../config/prisma.js'
 
+
+export function saveGoogleLogin(googleUserData) {
+    localStorage.clear(); 
+    
+    localStorage.setItem('authToken', googleUserData.token);
+    localStorage.setItem('userProfile', JSON.stringify(googleUserData.profile));
+}
+
 export const getUserBy = async (whereCondition) => {
 	console.log('User Lookup Condition:', whereCondition)
-	// เปลี่ยนไปใช้ findFirst แทน findUnique เพื่อรองรับเงื่อนไขที่ไม่ใช่ Unique Field
 	const correctedCondition = {};
     for (const key in whereCondition) {
          if (key === 'googleId') {
