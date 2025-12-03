@@ -24,33 +24,38 @@ export const postService = {
     return newPost;
   },
 
-  async getAllPosts() {
+  async getAllPosts(categoryId) {
+    const whereCondition = {};
+
+    if (categoryId) {
+      whereCondition.categoryId = Number(categoryId);
+    }
+
     return await prisma.post.findMany({
+      where: whereCondition, // ✅ ใส่เงื่อนไขตรงนี้
       orderBy: { createdAt: "desc" },
       include: {
-        user: {
-          select: { username: true, picture: true },
-        },
+        user: { select: { username: true, picture: true } },
         category: true,
-        comments: {
-          include: {
-            user: {
-              select: { username: true, picture: true },
-            },
-          },
-        },
+        comments: { include: { user: true } },
         likes: true,
       },
     });
   },
 
-  async deletePost(postId, userId) {
+  async deletePost(postId, userId, userRole) {
     const foundPost = await prisma.post.findUnique({ where: { id: postId } });
 
     if (!foundPost) throw createHttpError(404, "Data not found");
 
     if (foundPost.userId !== userId)
       throw createHttpError(401, "Cannot delete this post");
+    const isOwner = foundPost.userId === userId;
+    const isAdmin = userRole === "ADMIN";
+
+    if (!isOwner && !isAdmin) {
+      throw createHttpError(403, "Cannot delete this post");
+    }
 
     return await prisma.post.delete({ where: { id: postId } });
   },
