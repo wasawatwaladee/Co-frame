@@ -66,13 +66,8 @@ model Movie {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
 
-<<<<<<< HEAD
   rooms           Room[]
   category   MovieCategory @relation(fields: [categoryId], references: [id])
-=======
-  rooms      Room[]
-  category   MovieCategory? @relation(fields: [categoryId], references: [id])
->>>>>>> 89364b199a159626641b57a64a017696114e3e59
   categoryId Int?
 }
 
@@ -81,11 +76,7 @@ model MovieCategory {
   name        String
   description String?
   createdAt   DateTime @default(now())
-<<<<<<< HEAD
-  moives      Movie[]
-=======
   movies      Movie[]
->>>>>>> 89364b199a159626641b57a64a017696114e3e59
 }
 
 //ROOM (WATCH PARTY / LIVE WATCH)
