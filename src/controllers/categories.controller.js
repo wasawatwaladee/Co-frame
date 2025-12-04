@@ -1,8 +1,4 @@
 import { categoriesService } from "../services/categoriesCommunity.service.js";
-<<<<<<< HEAD
-
-=======
->>>>>>> 89364b199a159626641b57a64a017696114e3e59
 
 export const categoriesController = {
   async getAllCategories(req, res, next) {
@@ -16,7 +12,7 @@ export const categoriesController = {
 
   async createCategory(req, res, next) {
     try {
-      const { name, description, thumbnail, slug } = req.body;
+      const { name, description, slug } = req.body;
 
       const result = await categoriesService.createCategoriesService(
         name,
