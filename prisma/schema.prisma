@@ -66,9 +66,9 @@ model Movie {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
 
-  rooms           Room[]
+  rooms      Room[]
   category   MovieCategory @relation(fields: [categoryId], references: [id])
-  categoryId Int?
+  categoryId Int
 }
 
 model MovieCategory {
