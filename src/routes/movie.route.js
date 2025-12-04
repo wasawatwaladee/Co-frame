@@ -4,8 +4,8 @@ import { listMovies, listMoviesById } from "../controllers/movie.controller.js";
 const movieRouter = Router();
 
 movieRouter.get("/", listMovies);
-movieRouter.get('/:id',listMoviesById)
-
-
+movieRouter.get("/:id", listMoviesById);
+movieRouter.post("/", () => {});
+movieRouter.delete("/", () => {});
 
 export default movieRouter;
