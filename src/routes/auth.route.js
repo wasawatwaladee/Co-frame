@@ -1,10 +1,15 @@
 import {Router} from 'express'
-import { login, register } from '../controllers/auth.controller.js';
+import { getUserByUsername, googleLoginHandler, loginHandler, profileUser, registerHandler, updateProfile } from '../controllers/auth.controller.js';
+import authMiddleware from '../middlewares/auth.Middleware.js';
 
 
 const authRoute = Router()
 
-authRoute.post('/register', register)
-authRoute.post('/login', login)
+authRoute.post('/register', registerHandler)
+authRoute.post('/login', loginHandler)
+authRoute.post('/google/login', googleLoginHandler);
+authRoute.get('/me',authMiddleware , profileUser)
+authRoute.put('/me', authMiddleware, updateProfile)
+authRoute.get('/me/:username', getUserByUsername)
 
 export default authRoute;

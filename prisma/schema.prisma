@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      =  env("DATABASE_URL")
 }
 
 enum Role {
@@ -66,7 +66,7 @@ model Movie {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
 
-  rooms           Room[]
+  rooms      Room[]
   category   MovieCategory @relation(fields: [categoryId], references: [id])
   categoryId Int
 }
