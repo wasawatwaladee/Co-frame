@@ -1,6 +1,5 @@
 import {Router} from 'express'
-import { googleLoginHandler, loginHandler, registerHandler } from '../controllers/auth.controller.js';
-import { getUserByUsername, login, profileUser, register, updateProfile } from '../controllers/auth.controller.js';
+import { getUserByUsername, googleLoginHandler, loginHandler, profileUser, registerHandler, updateProfile } from '../controllers/auth.controller.js';
 import authMiddleware from '../middlewares/auth.Middleware.js';
 
 

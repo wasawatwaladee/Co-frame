@@ -3,7 +3,7 @@ import jsonwebtoken from 'jsonwebtoken';
 import createHttpError from "http-errors";
 import { loginSchema, registerSchema } from '../schemas/auth.schema.js'
 import { OAuth2Client } from 'google-auth-library';
-import { getUserBy, createUser } from '../services/user.service.js';
+import { getUserBy, createUser, getMe } from '../services/user.service.js';
 import prisma from "../config/prisma.js"
 import dotenv from 'dotenv';
 
