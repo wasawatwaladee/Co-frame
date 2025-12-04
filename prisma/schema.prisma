@@ -68,7 +68,7 @@ model Movie {
 
   rooms           Room[]
   category   MovieCategory @relation(fields: [categoryId], references: [id])
-  categoryId Int?
+  categoryId Int
 }
 
 model MovieCategory {
