@@ -46,6 +46,16 @@ async function main() {
     },
   ];
 
+  const categoryData = [
+    { id: 1, name: 'Action' },
+    { id: 2, name: 'Comedy' },
+    { id: 3, name: 'Drama' },
+    { id: 4, name: 'Horror' },
+    { id: 5, name: 'Sci-Fi' },
+    { id: 6, name: 'Romance' },
+    { id: 7, name: 'Thriller' },
+  ]
+
   for (const movie of movieData) {
     // ใช้ upsert เพื่ออัปเดตถ้ามี ID อยู่แล้ว หรือสร้างใหม่ถ้าไม่มี
     await prisma.movie.upsert({
@@ -55,6 +65,11 @@ async function main() {
     });
     console.log(`Upserted movie with ID: ${movie.id}`);
   }
+
+  for (const category of categoryData) {
+    await prisma.movieCategory.upsert({
+      where: { id: category.id },
+  })
 
   console.log('Seeding finished.');
 }
@@ -66,4 +81,4 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect()
-  })
+  })}

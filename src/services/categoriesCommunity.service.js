@@ -14,7 +14,10 @@ export const categoriesService = {
 
   async createCategoriesService(name, description, slug) {
     const data = { name, description, slug };
-    return await prisma.communityCategory.create({ data });
+    // const data2 = {}
+    await prisma.communityCategory.create({ data });
+    await prisma.movieCategory.create({ data });
+    return {message: "Create category success" };
   },
 
   async getCategoriesBySlug() {
