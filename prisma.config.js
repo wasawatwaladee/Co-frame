@@ -13,6 +13,10 @@ export default defineConfig({
   datasource: {
     url: env("DATABASE_URL"),
   },
+  seed: {
+    // ใช้ 'node' ในการรันไฟล์ seed.js ที่เป็น ES Module
+    command: "node prisma/seed.js", 
+  },
 });
 
 
