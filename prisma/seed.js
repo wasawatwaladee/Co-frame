@@ -2,6 +2,7 @@
 
 import { PrismaClient } from "../src/generated/prisma/client.js";
 const prisma = new PrismaClient()
+console.log('prisma connected')
 
 async function main() {
   console.log('Start seeding movie data...')
@@ -54,7 +55,19 @@ async function main() {
     { id: 5, name: 'Sci-Fi' },
     { id: 6, name: 'Romance' },
     { id: 7, name: 'Thriller' },
+    { id: 8, name: 'Documentary' },
+
   ]
+
+    for (const category of categoryData) {
+    await prisma.movieCategory.upsert({
+      where: { id: category.id },
+      create: { ...category },
+      update: { ...category },
+  })
+
+  console.log('Seeding finished.');
+}
 
   for (const movie of movieData) {
     // ใช้ upsert เพื่ออัปเดตถ้ามี ID อยู่แล้ว หรือสร้างใหม่ถ้าไม่มี
@@ -66,19 +79,17 @@ async function main() {
     console.log(`Upserted movie with ID: ${movie.id}`);
   }
 
-  for (const category of categoryData) {
-    await prisma.movieCategory.upsert({
-      where: { id: category.id },
-  })
 
-  console.log('Seeding finished.');
 }
 
 main()
+.then(()=>{
+  console.log('seed successfully')
+})
   .catch((e) => {
     console.error(e)
     process.exit(1)
   })
   .finally(async () => {
     await prisma.$disconnect()
-  })}
+  })
