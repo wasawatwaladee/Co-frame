@@ -59,12 +59,34 @@ async function main() {
 
   ]
 
+   const communityCategoryData = [
+    { id: 1, name: 'Action' ,slug:"Action"},
+    { id: 2, name: 'Comedy' ,slug:"Comedy"},
+    { id: 3, name: 'Drama' ,slug:"Drama"},
+    { id: 4, name: 'Horror' ,slug:"Horror"},
+    { id: 5, name: 'Sci-Fi' ,slug:"Sci-fi"},
+    { id: 6, name: 'Romance' ,slug:"Romance"},
+    { id: 7, name: 'Thriller' ,slug:"Thriller"},
+    { id: 8, name: 'Documentary' ,slug:"Documentary"},
+
+  ]
+
+
+    for(const communityCategory of communityCategoryData){
+    await prisma.communityCategory.upsert({
+      where: { id: communityCategory.id },
+      create: { ...communityCategory },
+      update: { ...communityCategory },
+  })
+  console.log('Seeding communityCategory finished')
+    }
     for (const category of categoryData) {
     await prisma.movieCategory.upsert({
       where: { id: category.id },
       create: { ...category },
       update: { ...category },
   })
+   
 
   console.log('Seeding finished.');
 }
