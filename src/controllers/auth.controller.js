@@ -3,7 +3,7 @@ import jsonwebtoken from 'jsonwebtoken';
 import createHttpError from "http-errors";
 import { loginSchema, registerSchema } from '../schemas/auth.schema.js'
 import { OAuth2Client } from 'google-auth-library';
-import { getUserBy, createUser, getMe } from '../services/user.service.js';
+import { getUserBy, createUser, getMe, getAllUsers } from '../services/user.service.js';
 import prisma from "../config/prisma.js"
 import dotenv from 'dotenv';
 
@@ -237,3 +237,44 @@ export const getUserByUsername = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getAllUsersController= async (req, res, next) => {
+    try {
+        const users = await getAllUsers();
+        res.json({ users });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const updateUserRole = async (req, res, next) => {
+    try {
+        const userId = Number(req.params.id);
+        const { role } = req.body;
+
+        const updatedUser = await prisma.user.update({
+            where: { id: userId },
+            data: { role },
+        })
+        res.json({
+            message: "User role updated successfully",
+            user: updatedUser
+        });
+      } catch (error) {
+        next(error);
+    }
+}
+
+export const deleteUser = async (req, res, next) => {
+    try {
+        const userId = Number(req.params.id);
+
+        await prisma.user.delete({
+            where: { id: userId },
+        });
+
+        res.json({ message: "User deleted successfully" });
+    } catch (error) {
+        next(error);
+    }
+}

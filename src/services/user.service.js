@@ -1,6 +1,12 @@
 import prisma from '../config/prisma.js'
 
 
+export const getAllUsers = async () => {
+    const user = await prisma.user.findMany();
+    
+    return user;
+}
+
 export function saveGoogleLogin(googleUserData) {
     localStorage.clear(); 
     
