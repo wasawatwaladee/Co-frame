@@ -98,7 +98,7 @@ export const googleLoginHandler = async (req, res, next) => {
 
 
 export const registerHandler = async (req, res, next) => {
-  const { email, firstName, lastName, password, mobile } = req.body
+  const { email, firstName, lastName, password, mobile ,username} = req.body
 
   // validation
   const user = registerSchema.parse(req.body)
@@ -115,7 +115,8 @@ export const registerHandler = async (req, res, next) => {
     password: await bcrypt.hash(password, 10),
     firstName: firstName,
     lastName: lastName,
-    mobile: mobile
+    mobile: mobile,
+    username:username
   }
 
   // 2. สร้างบัญชีผู้ใช้ใน Prisma 
