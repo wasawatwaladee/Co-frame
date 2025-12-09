@@ -2,7 +2,7 @@ import prisma from "../config/prisma.js";
 import createHttpError from "http-errors";
 
 export const postService = {
-  async createPost(userId, content, title, thumbnail, categoryId) {
+  async createPost(userId, title, content, thumbnail, categoryId) {
     const catIdInt = categoryId ? parseInt(categoryId) : undefined;
 
     const newPost = await prisma.post.create({

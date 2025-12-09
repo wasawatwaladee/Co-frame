@@ -9,6 +9,7 @@ import postRouter from "./routes/post.route.js";
 import categoriesRoutes from "./routes/categories.route.js";
 import movieRouter from "./routes/movie.route.js";
 import commentRouter from "./routes/coment.route.js";
+import trendRouter from "./routes/trending.route.js";
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use("/api", mainRouter);
 app.use("/api/post", postRouter);
 app.use("/api/comment", commentRouter);
 app.use("/api/categories", categoriesRoutes);
+app.use("/api/trending", trendRouter);
 app.use("/movies", movieRouter);
 
 //notfound middleware
