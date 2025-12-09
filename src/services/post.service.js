@@ -32,12 +32,19 @@ export const postService = {
     }
 
     return await prisma.post.findMany({
-      where: whereCondition, // ✅ ใส่เงื่อนไขตรงนี้
+      where: whereCondition,
       orderBy: { createdAt: "desc" },
       include: {
         user: { select: { username: true, picture: true } },
         category: true,
-        comments: { include: { user: true } },
+
+        comments: {
+          include: {
+            user: true,
+            likes: true,
+          },
+        },
+
         likes: true,
       },
     });
