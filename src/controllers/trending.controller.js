@@ -25,7 +25,8 @@ const getTrendingHashtags = async (req, res) => {
         const catName = post.category?.name || 'Uncategorized';
         
         // Regex เพื่อดึง Hashtag
-        const hashtags = post.content.match(/#(\w+)/g) || [];
+        // const hashtags = post.content.match(/#([\p{L}\p{N}]+(?:[\s\p{P}\p{S}\p{C}\p{M}]*[\p{L}\p{N}]+)*)/gu) || [];
+        const hashtags = post.content.match(/#([^\s#]+)/g) || [];
 
         // Group Hashtags by Category
         if (!categoryGroups[catName]) {
