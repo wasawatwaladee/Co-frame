@@ -1,7 +1,6 @@
 import { likeService } from "../services/like.service.js";
 
 export const likeController = {
-  // ฟังก์ชันสำหรับ Route Post
   async likePost(req, res, next) {
     try {
       const { id } = req.params;
