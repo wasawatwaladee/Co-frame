@@ -4,7 +4,8 @@ export const likeController = {
   async likePost(req, res, next) {
     try {
       const { id } = req.params;
-      const userId = req.user.id;
+
+      const userId = req.user ? req.user.id : null;
 
       const result = await likeService.togglePostLike(id, userId);
 
@@ -14,11 +15,11 @@ export const likeController = {
     }
   },
 
-  // ฟังก์ชันสำหรับ Route Comment
   async likeComment(req, res, next) {
     try {
       const { id } = req.params;
-      const userId = req.user.id;
+
+      const userId = req.user ? req.user.id : null;
 
       const result = await likeService.toggleCommentLike(id, userId);
 

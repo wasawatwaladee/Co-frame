@@ -7,11 +7,10 @@ export const commentService = {
       orderBy: { createdAt: "desc" },
       include: {
         user: {
-          select: {
-            firstName: true,
-            lastName: true,
-            picture: true,
-          },
+          select: { username: true, picture: true },
+        },
+        post: {
+          select: { title: true },
         },
       },
     });
@@ -67,25 +66,14 @@ export const commentService = {
   },
 
   async deleteComment(commentId, userId, userRole) {
-    const foundComment = await prisma.comment.findUnique({
-      where: { id: +commentId },
-    });
+    return await prisma.$transaction(async (tx) => {
+      await tx.commentLike.deleteMany({
+        where: { commentId: +commentId },
+      });
 
-    if (!foundComment) {
-      throw createHttpError(404, "Comment not found");
-    }
-
-    if (foundComment.userId !== userId) {
-      throw createHttpError(403, "You are not allowed to delete this comment");
-    }
-    const isOwner = foundPost.userId === userId;
-    const isAdmin = userRole === "ADMIN";
-
-    if (!isOwner && !isAdmin) {
-      throw createHttpError(403, "Cannot delete this comment");
-    }
-    return await prisma.comment.delete({
-      where: { id: +commentId },
+      return await tx.comment.delete({
+        where: { id: +commentId },
+      });
     });
   },
 };

@@ -28,6 +28,7 @@ export const commentController = {
         message: "success",
         allComment,
       });
+      console.log(allComment);
     } catch (error) {
       next(error);
     }

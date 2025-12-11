@@ -2,14 +2,12 @@ import prisma from "../config/prisma.js";
 import createHttpError from "http-errors";
 
 async function toggleGenericLike(model, targetField, targetId, userId) {
-  const compositeKeyName = `${targetField}_userId`;
+  const safeUserId = userId || null;
 
-  const existingLike = await model.findUnique({
+  const existingLike = await model.findFirst({
     where: {
-      [compositeKeyName]: {
-        userId: userId,
-        [targetField]: targetId,
-      },
+      userId: safeUserId,
+      [targetField]: targetId,
     },
   });
 
@@ -19,10 +17,9 @@ async function toggleGenericLike(model, targetField, targetId, userId) {
     });
     return { isLiked: false, message: "Unliked" };
   } else {
-    // 3B. ถ้าไม่มี -> สร้าง (Like)
     await model.create({
       data: {
-        userId: userId,
+        userId: safeUserId,
         [targetField]: targetId,
       },
     });
