@@ -7,7 +7,7 @@ const categoriesRoutes = Router();
 
 categoriesRoutes.get("/", categoriesController.getAllCategories);
 categoriesRoutes.post("/", categoriesController.createCategory);
-
+categoriesRoutes.put("/", categoriesController.updateCategory);
 categoriesRoutes.delete(
   "/:id",
   authMiddleware,

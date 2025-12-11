@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { commentController } from "../controllers/comment.controller.js";
-import authMiddleware from "../middlewares/auth.Middleware.js";
+import authMiddleware, {
+  optionalAuthenticate,
+} from "../middlewares/auth.Middleware.js";
 import { likeController } from "../controllers/like.controller.js";
 
 const commentRouter = Router();
@@ -11,6 +13,10 @@ commentRouter.patch("/:id", authMiddleware, commentController.updateComment);
 commentRouter.delete("/:id", authMiddleware, commentController.deleteComment);
 
 // like
-commentRouter.post("/:id/like", authMiddleware, likeController.likeComment);
+commentRouter.post(
+  "/:id/like",
+  optionalAuthenticate,
+  likeController.likeComment
+);
 
 export default commentRouter;
