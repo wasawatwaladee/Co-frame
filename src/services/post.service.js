@@ -24,12 +24,21 @@ export const postService = {
     return newPost;
   },
 
-  async getAllPosts(categoryId) {
+  async getAllPosts(categoryId,hashtag) {
     const whereCondition = {};
 
     if (categoryId) {
       whereCondition.categoryId = Number(categoryId);
     }
+    
+    if (hashtag) {
+      // ค้นหา content ที่มี # ตามด้วยคำนั้น (Frontend ส่งมาโดยลบ '#' ออกแล้ว)
+      whereCondition.content = {
+        contains: `#${hashtag}`, 
+        
+      };
+    }
+   
 
     return await prisma.post.findMany({
       where: whereCondition,
