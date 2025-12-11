@@ -12,7 +12,7 @@ async function main() {
     {
       id: 1,
       title: 'Bigbuck',
-      description: 'Big Buck Bunny',
+      description: 'Big Buck Bunny, a large, friendly rabbit who is harassed by a group of rude, small rodents. ',
       thumbnail: 'https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.jpg',
       videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
       poster: 'https://upload.wikimedia.org/wikipedia/commons/c/c5/Big_buck_bunny_poster_big.jpg',
@@ -24,7 +24,7 @@ async function main() {
     {
       id: 2,
       title: 'For Bigger Joyrides',
-      description: 'For Bigger Joyrides sample',
+      description: 'This is a short animation that was created as a promotional piece to advertise bigger cars and bigger joyrides',
       thumbnail: 'https://images-cdn.ispot.tv/ad/7TK8/default-large.jpg',
       videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
       poster: 'https://images-cdn.ispot.tv/ad/7TK8/default-large.jpg',
@@ -36,7 +36,7 @@ async function main() {
     {
       id: 3,
       title: 'Tears of Steel',
-      description: 'Tears of Steel sample',
+      description: 'A group of scientists and warriors in a future setting as they attempt to correct a catastrophic event that led to the collapse of the world.',
       thumbnail: 'https://resizing.flixster.com/oo9VGItEyVU48bUnUO23gvP5mrA=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p10875273_v_h9_ac.jpg',
       videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
       poster: 'https://resizing.flixster.com/oo9VGItEyVU48bUnUO23gvP5mrA=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p10875273_v_h9_ac.jpg',
