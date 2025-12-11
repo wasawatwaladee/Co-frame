@@ -25,13 +25,14 @@ export const postController = {
 
   async getAllPosts(req, res, next) {
     try {
-      const { categoryId } = req.query;
+      const { categoryId ,hashtag} = req.query;
 
-      const posts = await postService.getAllPosts(categoryId);
+      const posts = await postService.getAllPosts(categoryId,hashtag);
       res.json({ posts });
     } catch (error) {
       next(error);
     }
+    
   },
   async deletePost(req, res, next) {
     try {
